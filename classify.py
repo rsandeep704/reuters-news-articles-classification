@@ -15,6 +15,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.svm import LinearSVC
+import math
 
 cachedStopWords = stopwords.words("english")
 
@@ -73,14 +74,26 @@ def log_results(classes, precision, recall, f1score):
     f.write(line + '\n')
 
     line = ''
+    pr_tot = 0
+    pr_cnt = 0
     for pr in precision:
+        if not math.isnan(pr):
+            pr_tot += pr
+            pr_cnt += 1
         line += str(pr) + ','
     f.write(line + '\n')
+    print("Average: " + str(pr_tot / pr_cnt))
 
     line = ''
+    rc_tot = 0
+    rc_cnt = 0
     for rc in recall:
+        if not rc == 0:
+            rc_tot += rc
+            rc_cnt += 1
         line += str(rc) + ','
     f.write(line + '\n')
+    print("Recall: " + str(rc_tot / rc_cnt))
 
     line = ''
     for f1sc in f1score:
